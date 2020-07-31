@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: happy-ingress
+  annotations:
+    INGRESS.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+  - hosts:
+    - nginx.example.com                          # 접속 hosts 를 nginx.example.com 으로 지정
+    secretName: ingress-tls-secret
+  rules:
+  - host: nginx.example.com
+    http:
+      paths:
+      - path: /hi                                # /hi path 을 주어 접속가능하게 한다.
+        backend:
+          serviceName: wp-svc                    # 만든 서비스를 지정함 로드벨런서로 해도되고 
+          servicePort: 4000                      # Cluster IP 로 해도된다

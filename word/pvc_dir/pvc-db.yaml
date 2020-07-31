@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db-pvc
+  labels:
+    app: mysql
+spec:                                     # 라벨을 지정하고 엑세스 모드를 RWO 로 지정한다.
+  accessModes:                            # 기본스토리지 설정을 ceph-fs 로하여 따로 ClassName을 적지 않음
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi

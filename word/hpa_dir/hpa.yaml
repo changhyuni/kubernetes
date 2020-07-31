@@ -1,0 +1,13 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpa-word
+  namespace: wordtest
+spec:
+  maxReplicas: 5
+  minReplicas: 1
+  scaleTargetRef:                                  # HPA을 설정할 오브젝트를 설정한다.
+    apiVersion: apps/v1                            # Deployment 의 이름과 스펙을 간략하게 정의한다.
+    kind: Deployment
+    name: wp-dp
+  targetCPUUtilizationPercentage: 70               # CPU 임계치의 최대값을 설정한다 (70)

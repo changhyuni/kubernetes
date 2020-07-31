@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: wp-svc                             # 인그레스와 연결할 서비스를 정의한다.
+spec:
+  selector:
+    app: mysql
+  ports:
+  - port: 4000                             # 포트는 4000번을 지정한다.
+    targetPort: wordpress-port

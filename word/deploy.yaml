@@ -1,0 +1,50 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wp-dp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - resources:                          # 리소스를 지정해 HPA 가 사용할 metric 을 만든다.
+          requests:
+            cpu: 50m
+            memory: 30Mi
+        name: wp-test
+        image: wordpress:latest
+        env:
+        - name: WORDPRESS_DB_HOST
+          value: sf-hl
+        - name: WORDPRESS_DB_USER
+          value: wp-admin
+        - name: WORDPRESS_DB_NAME
+          value: wordpress
+        - name: WORDPRESS_DB_PASSWORD
+          value: '1234'
+        volumeMounts:
+          - mountPath: /var/www/html
+            subPath: html
+            name: wp-pv-storage 
+        ports:
+        - containerPort: 80
+          name: wordpress-port
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+        readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+      volumes:                              # pvc을 지정하는 볼륨
+        - name: wp-pv-storage
+          persistentVolumeClaim:
+            claimName: wp-lb-pvc
